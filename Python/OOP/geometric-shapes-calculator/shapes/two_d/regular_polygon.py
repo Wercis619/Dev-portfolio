@@ -6,6 +6,9 @@ class RegularPolygon(Shape2D):
         super().__init__("Regular Polygon")
         self.validate_positive(side,number_of_sides)
 
+        if not isinstance(number_of_sides, int):
+            raise ValueError("Number of sides must be an integer")
+
         if number_of_sides < 3:
             raise ValueError("Polygon must have at least 3 sides")
         if number_of_sides == 3:

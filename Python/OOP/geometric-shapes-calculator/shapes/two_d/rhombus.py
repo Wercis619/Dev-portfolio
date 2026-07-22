@@ -1,11 +1,16 @@
+import math
 from shapes.shape_2d import Shape2D
+
 
 class Rhombus(Shape2D):
     def __init__(self, side, diagonal_a, diagonal_b):
         super().__init__("Rhombus")
         self.validate_positive(side,diagonal_a,diagonal_b)
 
-        if diagonal_a ** 2 + diagonal_b ** 2 != 4 * side ** 2:
+        if not math.isclose(
+                diagonal_a ** 2 + diagonal_b ** 2,
+                4 * side ** 2
+        ):
             raise ValueError("Impossible rhombus")
 
         self.side = side

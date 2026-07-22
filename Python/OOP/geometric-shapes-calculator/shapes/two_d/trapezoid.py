@@ -1,18 +1,27 @@
 import math
 from shapes.shape_2d import Shape2D
 
+
 class Trapezoid(Shape2D):
+
     def __init__(self, base_a, base_b, height, side_a, side_b):
         super().__init__("Trapezoid")
-        self.validate_positive(base_a, base_b, height, side_a, side_b)
+
+        self.validate_positive(
+            base_a,
+            base_b,
+            height,
+            side_a,
+            side_b
+        )
+
+        if height > side_a or height > side_b:
+            raise ValueError("Impossible trapezoid")
 
         difference = abs(base_a - base_b)
 
         x1 = math.sqrt(side_a ** 2 - height ** 2)
         x2 = math.sqrt(side_b ** 2 - height ** 2)
-
-        if height > side_a or height > side_b:
-            raise ValueError("Impossible trapezoid")
 
         if difference > x1 + x2:
             raise ValueError("Impossible trapezoid")
@@ -24,7 +33,7 @@ class Trapezoid(Shape2D):
         self.side_b = side_b
 
     def shape_type(self):
-        if self.side_a == self.side_b:
+        if math.isclose(self.side_a, self.side_b):
             return "Isosceles trapezoid"
 
         return "Scalene trapezoid"

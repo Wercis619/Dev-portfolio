@@ -5,13 +5,6 @@ class Triangle(Shape2D):
 
     def __init__(self, side_a, side_b, side_c):
 
-        if (
-            side_a + side_b <= side_c
-            or side_a + side_c <= side_b
-            or side_b + side_c <= side_a
-        ):
-            raise ValueError("Impossible triangle")
-
         super().__init__("Triangle")
 
         self.validate_positive(
@@ -20,19 +13,29 @@ class Triangle(Shape2D):
             side_c
         )
 
+        if (
+                side_a + side_b <= side_c
+                or side_a + side_c <= side_b
+                or side_b + side_c <= side_a
+        ):
+            raise ValueError("Impossible triangle")
+
         self.side_a = side_a
         self.side_b = side_b
         self.side_c = side_c
 
     def triangle_type(self):
 
-        if self.side_a == self.side_b and self.side_b == self.side_c:
+        if (
+                math.isclose(self.side_a, self.side_b)
+                and math.isclose(self.side_b, self.side_c)
+        ):
             return "Equilateral triangle"
 
         elif (
-            self.side_a == self.side_b
-            or self.side_a == self.side_c
-            or self.side_b == self.side_c
+                math.isclose(self.side_a, self.side_b)
+                or math.isclose(self.side_a, self.side_c)
+                or math.isclose(self.side_b, self.side_c)
         ):
             return "Isosceles triangle"
 
@@ -48,7 +51,7 @@ class Triangle(Shape2D):
         b = sides[1]
         c = sides[2]
 
-        if a ** 2 + b ** 2 == c ** 2:
+        if math.isclose(a ** 2 + b ** 2, c ** 2):
             return "Right triangle"
 
         elif a ** 2 + b ** 2 > c ** 2:
