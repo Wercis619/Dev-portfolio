@@ -4,6 +4,10 @@ class Rectangle(Shape2D):
     def __init__(self, width, height):
         super().__init__("Rectangle")
         self.validate_positive(width, height)
+        if width > 600 or height > 600:
+            raise ValueError(
+                "Width and height cannot be greater than 600"
+            )
         self.width = width
         self.height = height
 

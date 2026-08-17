@@ -1,4 +1,6 @@
-from app.terminal import run_terminal
+from gui.app import GeometryApp
+
 
 if __name__ == "__main__":
-    run_terminal()
+    app = GeometryApp()
+    app.run()

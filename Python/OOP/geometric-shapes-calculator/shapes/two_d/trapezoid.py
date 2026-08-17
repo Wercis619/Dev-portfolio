@@ -4,6 +4,8 @@ from shapes.shape_2d import Shape2D
 
 class Trapezoid(Shape2D):
 
+    MAX_SIZE = 600
+
     def __init__(self, base_a, base_b, height, side_a, side_b):
         super().__init__("Trapezoid")
 
@@ -15,6 +17,17 @@ class Trapezoid(Shape2D):
             side_b
         )
 
+        if (
+            base_a > self.MAX_SIZE
+            or base_b > self.MAX_SIZE
+            or height > self.MAX_SIZE
+            or side_a > self.MAX_SIZE
+            or side_b > self.MAX_SIZE
+        ):
+            raise ValueError(
+                "Trapezoid dimensions cannot be greater than 600"
+            )
+
         if height > side_a or height > side_b:
             raise ValueError("Impossible trapezoid")
 
@@ -23,7 +36,10 @@ class Trapezoid(Shape2D):
         x1 = math.sqrt(side_a ** 2 - height ** 2)
         x2 = math.sqrt(side_b ** 2 - height ** 2)
 
-        if difference > x1 + x2:
+        if (
+            difference < abs(x1 - x2)
+            or difference > x1 + x2
+        ):
             raise ValueError("Impossible trapezoid")
 
         self.base_a = base_a
@@ -48,7 +64,16 @@ class Trapezoid(Shape2D):
         )
 
     def area(self):
-        return ((self.base_a + self.base_b) * self.height) / 2
+        return (
+            (self.base_a + self.base_b)
+            * self.height
+            / 2
+        )
 
     def perimeter(self):
-        return self.base_a + self.base_b + self.side_a + self.side_b
+        return (
+            self.base_a
+            + self.base_b
+            + self.side_a
+            + self.side_b
+        )

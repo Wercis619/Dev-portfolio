@@ -12,6 +12,14 @@ class Triangle(Shape2D):
             side_b,
             side_c
         )
+        if (
+                side_a > 600
+                or side_b > 600
+                or side_c > 600
+        ):
+            raise ValueError(
+                "Triangle sides cannot be greater than 600"
+            )
 
         if (
                 side_a + side_b <= side_c

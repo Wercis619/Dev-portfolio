@@ -5,6 +5,10 @@ class Circle(Shape2D):
     def __init__(self, radius):
         super().__init__("Circle")
         self.validate_positive(radius)
+        if radius > 600:
+            raise ValueError(
+                "Radius cannot be greater than 600"
+            )
         self.radius = radius
 
     def shape_type(self):

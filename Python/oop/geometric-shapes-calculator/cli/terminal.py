@@ -12,6 +12,7 @@ from shapes.two_d.rhombus import Rhombus
 from shapes.two_d.square import Square
 from shapes.two_d.trapezoid import Trapezoid
 from shapes.two_d.triangle import Triangle
+from shapes.two_d.parallelogram import Parallelogram
 
 
 def run_terminal():
@@ -58,6 +59,10 @@ def get_menu_choice(options):
 
         print("Invalid option. Try again.")
 
+
+
+
+
 def shapes_2d_menu():
     while True:
         print(
@@ -70,12 +75,13 @@ def shapes_2d_menu():
 4. Triangle
 5. Trapezoid
 6. Rhombus
-7. Regular Polygon
+7. Parallelogram
+8. Regular Polygon
 0. Back
 """
         )
 
-        choice = get_menu_choice([0, 1, 2, 3, 4, 5, 6, 7])
+        choice = get_menu_choice([0, 1, 2, 3, 4, 5, 6, 7, 8])
 
         match choice:
             case 1:
@@ -97,6 +103,9 @@ def shapes_2d_menu():
                 create_rhombus()
 
             case 7:
+                create_parallelogram()
+
+            case 8:
                 create_regular_polygon()
 
             case 0:
@@ -274,6 +283,30 @@ def create_rhombus():
             print(f"Error: {error}")
             print("Try again.")
 
+def create_parallelogram():
+    while True:
+        try:
+            base = float(input("Enter base: "))
+            side = float(input("Enter side: "))
+            height = float(input("Enter height: "))
+
+            parallelogram = Parallelogram(
+                base,
+                side,
+                height
+            )
+
+            print(parallelogram)
+
+            choice = ask_continue()
+
+            if choice == 0:
+                return
+
+        except ValueError as error:
+            print(f"Error: {error}")
+            print("Try again.")
+
 def create_regular_polygon():
     while True:
         try:
@@ -425,12 +458,13 @@ Choose base:
 3. Square
 4. Trapezoid
 5. Rhombus
-6. Regular Polygon
+6. Parallelogram
+7. Regular Polygon
 0. Back
 """
     )
 
-    choice = get_menu_choice([0,1,2,3,4,5,6])
+    choice = get_menu_choice([0,1,2,3,4,5,6,7])
 
     match choice:
         case 1:
@@ -478,6 +512,17 @@ Choose base:
             )
 
         case 6:
+            base = float(input("Enter base: "))
+            side = float(input("Enter side: "))
+            height = float(input("Enter height: "))
+
+            return Parallelogram(
+                base,
+                side,
+                height
+            )
+
+        case 7:
             side = float(input("Enter side: "))
             number_of_sides = int(input("Enter number of sides: "))
 

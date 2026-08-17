@@ -3,6 +3,10 @@ class Square(Rectangle):
     def __init__(self, side):
         super().__init__(side, side)
         self.validate_positive(side)
+        if side > 600:
+            raise ValueError(
+                "Side cannot be greater than 600"
+            )
         self.name = "Square"
         self.side = side
 

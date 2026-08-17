@@ -2,9 +2,16 @@ import math
 from shapes.shape_2d import Shape2D
 
 class RegularPolygon(Shape2D):
+    MAX_SIZE = 600
+
     def __init__(self, side, number_of_sides):
         super().__init__("Regular Polygon")
         self.validate_positive(side,number_of_sides)
+
+        if side > self.MAX_SIZE:
+            raise ValueError(
+                "Side cannot be greater than 600"
+            )
 
         if not isinstance(number_of_sides, int):
             raise ValueError("Number of sides must be an integer")

@@ -28,6 +28,7 @@ class Prism(Shape3D):
             "Decagon": "Decagonal",
             "Trapezoid": "Trapezoidal",
             "Rhombus": "Rhombic",
+            "Parallelogram": "Parallelogram-based",
         }
 
         return names.get(self.base.name, self.base.name)
