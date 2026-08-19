@@ -140,7 +140,6 @@ class ShapeRenderer:
             (x, y)
         ]
 
-        # Calculate the centroid
         center_x = sum(
             point[0] for point in points
         ) / 3
@@ -199,7 +198,6 @@ class ShapeRenderer:
             (offset, height)
         ]
 
-        # Calculate the geometric center of the trapezoid
         area_twice = 0
         center_x = 0
         center_y = 0
@@ -228,7 +226,6 @@ class ShapeRenderer:
         center_x /= 3 * area_twice
         center_y /= 3 * area_twice
 
-        # Move the trapezoid so its center is (0, 0)
         centered_points = [
             (
                 x - center_x,
@@ -264,13 +261,11 @@ class ShapeRenderer:
         half_a = diagonal_a / 2
         half_b = diagonal_b / 2
 
-        # Angle of the diagonal relative to the horizontal axis
         angle = math.atan2(
             half_a,
             half_b
         )
 
-        # Four vertices before rotation
         points = [
             (0, half_a),
             (half_b, 0),
@@ -278,7 +273,6 @@ class ShapeRenderer:
             (-half_b, 0)
         ]
 
-        # Find angle of the lower-right side
         x1, y1 = points[2]
         x2, y2 = points[1]
 
@@ -287,8 +281,6 @@ class ShapeRenderer:
             x2 - x1
         )
 
-        # Rotate the entire rhombus so that
-        # the lower side becomes horizontal
         rotation = -side_angle
 
         rotated_points = []
