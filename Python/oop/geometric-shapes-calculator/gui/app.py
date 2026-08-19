@@ -327,11 +327,39 @@ class GeometryApp:
     def set_desktop_layout(self):
         self.main_container.configure(padding=20)
 
+        self.left_container.columnconfigure(
+            0,
+            weight=1
+        )
+
+        self.left_container.columnconfigure(
+            1,
+            weight=0
+        )
+
+        self.left_container.rowconfigure(
+            0,
+            weight=1
+        )
+
+        self.left_container.rowconfigure(
+            1,
+            weight=1
+        )
+
         self.input_card.grid_configure(
+            row=0,
+            column=0,
+            sticky="nsew",
+            padx=0,
             pady=(0, 20)
         )
 
         self.info_card.grid_configure(
+            row=1,
+            column=0,
+            sticky="nsew",
+            padx=0,
             pady=(20, 0)
         )
 
@@ -372,12 +400,40 @@ class GeometryApp:
             padding=(12, 24)
         )
 
+        self.left_container.columnconfigure(
+            0,
+            weight=1
+        )
+
+        self.left_container.columnconfigure(
+            1,
+            weight=1
+        )
+
+        self.left_container.rowconfigure(
+            0,
+            weight=1
+        )
+
+        self.left_container.rowconfigure(
+            1,
+            weight=0
+        )
+
         self.input_card.grid_configure(
-            pady=(0, 24)
+            row=0,
+            column=0,
+            sticky="nsew",
+            padx=(0, 6),
+            pady=0
         )
 
         self.info_card.grid_configure(
-            pady=(0, 0)
+            row=0,
+            column=1,
+            sticky="nsew",
+            padx=(6, 0),
+            pady=0
         )
 
         self.main_container.columnconfigure(
@@ -406,11 +462,39 @@ class GeometryApp:
             padding=(7, 14)
         )
 
+        self.left_container.columnconfigure(
+            0,
+            weight=1
+        )
+
+        self.left_container.columnconfigure(
+            1,
+            weight=0
+        )
+
+        self.left_container.rowconfigure(
+            0,
+            weight=0
+        )
+
+        self.left_container.rowconfigure(
+            1,
+            weight=0
+        )
+
         self.input_card.grid_configure(
+            row=0,
+            column=0,
+            sticky="ew",
+            padx=0,
             pady=(0, 14)
         )
 
         self.info_card.grid_configure(
+            row=1,
+            column=0,
+            sticky="ew",
+            padx=0,
             pady=(0, 0)
         )
 
