@@ -543,9 +543,8 @@ def create_pyramid():
                 return
 
             height = float(input("Enter pyramid height: "))
-            slant_height = float(input("Enter pyramid slant height: "))
 
-            pyramid = Pyramid(base, height, slant_height)
+            pyramid = Pyramid(base, height)
 
             print(pyramid)
 

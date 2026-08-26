@@ -3,6 +3,8 @@ from tkinter import ttk
 
 from gui.panels.shape_input import ShapeInputPanel
 from gui.renderer import ShapeRenderer
+from shapes.shape_2d import Shape2D
+from shapes.shape_3d import Shape3D
 
 
 class GeometryApp:
@@ -10,13 +12,47 @@ class GeometryApp:
     def __init__(self):
         self.root = tk.Tk()
 
-        self.root.title("Geometry Calculator")
-        self.root.geometry("1200x780")
-        self.root.minsize(300, 600)
-        self.root.configure(bg="#f4f6f9")
+        self.root.title(
+            "Geometry Calculator"
+        )
+
+        self.root.geometry(
+            "1200x780"
+        )
+
+        self.root.minsize(
+            300,
+            600
+        )
+
+        self.root.configure(
+            bg="#f4f6f9"
+        )
 
         self.current_layout_mode = None
-        self.touch_start_y = 0
+        self.touch_start_y = None
+
+        self.phone_canvas = None
+        self.main_container = None
+        self.left_container = None
+
+        self.input_card = None
+        self.input_title = None
+        self.input_panel = None
+
+        self.info_card = None
+        self.info_title = None
+
+        self.shape_name_label = None
+        self.shape_type_label = None
+        self.parameters_label = None
+        self.area_label = None
+        self.perimeter_label = None
+
+        self.right_container = None
+        self.renderer = None
+
+        self.phone_window = None
 
         self.configure_style()
         self.create_scroll_system()
@@ -45,9 +81,18 @@ class GeometryApp:
             add="+"
         )
 
+        self.root.bind_all(
+            "<ButtonRelease-1>",
+            self.end_touch_scroll,
+            add="+"
+        )
+
     def configure_style(self):
         style = ttk.Style()
-        style.theme_use("clam")
+
+        style.theme_use(
+            "clam"
+        )
 
         style.configure(
             ".",
@@ -89,17 +134,43 @@ class GeometryApp:
 
         style.map(
             "TButton",
-            background=[("active", "#15578a")]
+            background=[
+                (
+                    "active",
+                    "#15578a"
+                )
+            ]
         )
 
         style.map(
             "TCombobox",
-            fieldbackground=[("readonly", "#ffffff")],
-            selectbackground=[("readonly", "#ffffff")],
-            selectforeground=[("readonly", "#1e293b")],
+            fieldbackground=[
+                (
+                    "readonly",
+                    "#ffffff"
+                )
+            ],
+            selectbackground=[
+                (
+                    "readonly",
+                    "#ffffff"
+                )
+            ],
+            selectforeground=[
+                (
+                    "readonly",
+                    "#1e293b"
+                )
+            ],
             focuscolor=[
-                ("active", "none"),
-                ("focus", "none")
+                (
+                    "active",
+                    "none"
+                ),
+                (
+                    "focus",
+                    "none"
+                )
             ]
         )
 
@@ -172,7 +243,11 @@ class GeometryApp:
         self.input_title = tk.Label(
             self.input_card,
             text="Choose shape",
-            font=("Segoe UI", 12, "bold"),
+            font=(
+                "Segoe UI",
+                12,
+                "bold"
+            ),
             bg="#ffffff",
             fg="#1e293b",
             anchor="w"
@@ -210,7 +285,11 @@ class GeometryApp:
         self.info_title = tk.Label(
             self.info_card,
             text="Shape Information",
-            font=("Segoe UI", 12, "bold"),
+            font=(
+                "Segoe UI",
+                12,
+                "bold"
+            ),
             bg="#ffffff",
             fg="#1e293b",
             anchor="w"
@@ -221,36 +300,100 @@ class GeometryApp:
             pady=(0, 12)
         )
 
-        labels_config = [
-            ("shape_name_label", "Name: —"),
-            ("shape_type_label", "Type: —"),
-            ("parameters_label", "Parameters: —"),
-            ("area_label", "Area: —"),
-            ("perimeter_label", "Perimeter: —")
-        ]
+        self.shape_name_label = tk.Label(
+            self.info_card,
+            text="Name: —",
+            font=(
+                "Segoe UI",
+                11
+            ),
+            bg="#ffffff",
+            fg="#475569",
+            anchor="w",
+            justify="left",
+            wraplength=320
+        )
 
-        for attr_name, text in labels_config:
-            label = tk.Label(
-                self.info_card,
-                text=text,
-                font=("Segoe UI", 11),
-                bg="#ffffff",
-                fg="#475569",
-                anchor="w",
-                justify="left",
-                wraplength=320
-            )
+        self.shape_name_label.pack(
+            anchor="w",
+            pady=6
+        )
 
-            label.pack(
-                anchor="w",
-                pady=6
-            )
+        self.shape_type_label = tk.Label(
+            self.info_card,
+            text="Type: —",
+            font=(
+                "Segoe UI",
+                11
+            ),
+            bg="#ffffff",
+            fg="#475569",
+            anchor="w",
+            justify="left",
+            wraplength=320
+        )
 
-            setattr(
-                self,
-                attr_name,
-                label
-            )
+        self.shape_type_label.pack(
+            anchor="w",
+            pady=6
+        )
+
+        self.parameters_label = tk.Label(
+            self.info_card,
+            text="Parameters: —",
+            font=(
+                "Segoe UI",
+                11
+            ),
+            bg="#ffffff",
+            fg="#475569",
+            anchor="w",
+            justify="left",
+            wraplength=320
+        )
+
+        self.parameters_label.pack(
+            anchor="w",
+            pady=6
+        )
+
+        self.area_label = tk.Label(
+            self.info_card,
+            text="Area: —",
+            font=(
+                "Segoe UI",
+                11
+            ),
+            bg="#ffffff",
+            fg="#475569",
+            anchor="w",
+            justify="left",
+            wraplength=320
+        )
+
+        self.area_label.pack(
+            anchor="w",
+            pady=6
+        )
+
+        self.perimeter_label = tk.Label(
+            self.info_card,
+            text="Perimeter: —",
+            font=(
+                "Segoe UI",
+                11
+            ),
+            bg="#ffffff",
+            fg="#475569",
+            anchor="w",
+            justify="left",
+            wraplength=320
+        )
+
+        self.perimeter_label.pack(
+            anchor="w",
+            pady=6
+        )
 
         self.right_container = ttk.Frame(
             self.main_container,
@@ -288,7 +431,10 @@ class GeometryApp:
             weight=1
         )
 
-    def check_responsive_layout(self, event):
+    def check_responsive_layout(
+        self,
+        event
+    ):
         if event.widget != self.root:
             return
 
@@ -296,36 +442,59 @@ class GeometryApp:
 
         if width >= 950:
             new_mode = "desktop"
+
         elif width >= 600:
             new_mode = "tablet"
+
         else:
             new_mode = "phone"
 
-        if new_mode == self.current_layout_mode:
+        if (
+            new_mode
+            == self.current_layout_mode
+        ):
             return
 
-        self.current_layout_mode = new_mode
+        self.current_layout_mode = (
+            new_mode
+        )
+
+        self.input_panel.set_layout_mode(
+            new_mode
+        )
+
+        self.touch_start_y = None
+
         self.reset_main_grid()
 
         if new_mode == "desktop":
+
             self.hide_phone_scroll()
+
             self.set_desktop_layout()
 
         elif new_mode == "tablet":
+
             self.show_phone_scroll()
+
             self.set_tablet_layout()
 
         else:
+
             self.show_phone_scroll()
+
             self.set_phone_layout()
 
         self.root.after(
             20,
-            self.update_phone_scroll_region
+            self.update_phone_scroll_region,
+            None
         )
 
     def set_desktop_layout(self):
-        self.main_container.configure(padding=20)
+        self.main_container.configure(
+            padding=20
+        )
 
         self.left_container.columnconfigure(
             0,
@@ -521,6 +690,7 @@ class GeometryApp:
 
     def reset_main_grid(self):
         self.left_container.grid_forget()
+
         self.right_container.grid_forget()
 
         self.main_container.columnconfigure(
@@ -546,7 +716,7 @@ class GeometryApp:
         )
 
     def show_phone_scroll(self):
-        if hasattr(self, "phone_window"):
+        if self.phone_window is not None:
             return
 
         self.main_container.pack_forget()
@@ -556,11 +726,13 @@ class GeometryApp:
             expand=True
         )
 
-        self.phone_window = self.phone_canvas.create_window(
-            0,
-            0,
-            window=self.main_container,
-            anchor="nw"
+        self.phone_window = (
+            self.phone_canvas.create_window(
+                0,
+                0,
+                window=self.main_container,
+                anchor="nw"
+            )
         )
 
         self.main_container.bind(
@@ -569,14 +741,14 @@ class GeometryApp:
         )
 
     def hide_phone_scroll(self):
-        if not hasattr(self, "phone_window"):
+        if self.phone_window is None:
             return
 
         self.phone_canvas.delete(
             self.phone_window
         )
 
-        del self.phone_window
+        self.phone_window = None
 
         self.phone_canvas.pack_forget()
 
@@ -585,68 +757,255 @@ class GeometryApp:
             expand=True
         )
 
-    def update_phone_canvas_width(self, event):
-        if hasattr(self, "phone_window"):
+        self.touch_start_y = None
+
+    def update_phone_canvas_width(
+        self,
+        event
+    ):
+        if self.phone_window is not None:
+
             self.phone_canvas.itemconfig(
                 self.phone_window,
                 width=event.width
             )
 
-    def update_phone_scroll_region(self, event=None):
-        if hasattr(self, "phone_window"):
+    def update_phone_scroll_region(
+        self,
+        _event=None
+    ):
+        if self.phone_window is not None:
+
             self.phone_canvas.configure(
-                scrollregion=self.phone_canvas.bbox("all")
+                scrollregion=(
+                    self.phone_canvas.bbox(
+                        "all"
+                    )
+                )
             )
 
-    def on_mousewheel(self, event):
-        if self.current_layout_mode in ("phone", "tablet"):
-            self.phone_canvas.yview_scroll(
-                int(-event.delta / 120),
-                "units"
-            )
-
-    def start_touch_scroll(self, event):
-        if self.current_layout_mode in ("phone", "tablet"):
-            self.touch_start_y = event.y_root
-
-    def drag_touch_scroll(self, event):
-        if self.current_layout_mode not in ("phone", "tablet"):
+    def on_mousewheel(
+        self,
+        event
+    ) -> None:
+        if self.current_layout_mode not in (
+            "phone",
+            "tablet"
+        ):
             return
 
-        distance = self.touch_start_y - event.y_root
+        if (
+            self.current_layout_mode
+            == "tablet"
+            and self.input_panel.should_capture_touch(
+                event.widget
+            )
+        ):
+            return
 
-        if abs(distance) >= 2:
-            self.phone_canvas.yview_scroll(
-                int(distance),
-                "units"
+        self.phone_canvas.yview_scroll(
+            int(
+                -event.delta / 120
+            ),
+            "units"
+        )
+
+    def start_touch_scroll(
+        self,
+        event
+    ) -> None:
+
+        if self.current_layout_mode not in (
+            "phone",
+            "tablet"
+        ):
+            self.touch_start_y = None
+            return
+
+        if (
+            self.current_layout_mode
+            == "tablet"
+            and self.input_panel.should_capture_touch(
+                event.widget
+            )
+        ):
+            self.touch_start_y = None
+            return
+
+        self.touch_start_y = (
+            event.y_root
+        )
+
+    def drag_touch_scroll(
+        self,
+        event
+    ) -> str | None:
+
+        if self.current_layout_mode not in (
+            "phone",
+            "tablet"
+        ):
+            return None
+
+        if (
+            self.current_layout_mode
+            == "tablet"
+            and self.input_panel.should_capture_touch(
+                event.widget
+            )
+        ):
+            return None
+
+        if self.touch_start_y is None:
+            return None
+
+        bbox = self.phone_canvas.bbox(
+            "all"
+        )
+
+        if bbox is None:
+            return None
+
+        content_height = (
+            bbox[3] - bbox[1]
+        )
+
+        canvas_height = (
+            self.phone_canvas.winfo_height()
+        )
+
+        scrollable_height = (
+            content_height
+            - canvas_height
+        )
+
+        if scrollable_height <= 0:
+            return None
+
+        distance = (
+            self.touch_start_y
+            - event.y_root
+        )
+
+        current_top, _ = (
+            self.phone_canvas.yview()
+        )
+
+        current_pixel = (
+            current_top
+            * content_height
+        )
+
+        new_pixel = (
+            current_pixel
+            + distance
+        )
+
+        new_pixel = max(
+            0,
+            min(
+                new_pixel,
+                scrollable_height
+            )
+        )
+
+        if content_height > 0:
+
+            self.phone_canvas.yview_moveto(
+                new_pixel
+                / content_height
             )
 
-            self.touch_start_y = event.y_root
+        self.touch_start_y = (
+            event.y_root
+        )
 
-    def update_shape_info(self, shape):
+        return "break"
+
+    def end_touch_scroll(
+        self,
+        _event
+    ) -> None:
+
+        self.touch_start_y = None
+
+    def update_shape_info(
+        self,
+        shape
+    ):
+
         self.shape_name_label.config(
             text=f"Name: {shape.name}"
         )
 
         self.shape_type_label.config(
-            text=f"Type: {shape.shape_type()}"
+            text=(
+                f"Type: "
+                f"{shape.shape_type()}"
+            )
         )
 
         self.parameters_label.config(
-            text=f"Parameters: {shape.parameters()}"
+            text=(
+                f"Parameters: "
+                f"{shape.parameters()}"
+            )
         )
 
-        self.area_label.config(
-            text=f"Area: {shape.area():.2f}"
+        # 2D
+
+        if isinstance(
+            shape,
+            Shape2D
+        ):
+
+            self.area_label.config(
+                text=(
+                    f"Area: "
+                    f"{shape.area():.2f}"
+                )
+            )
+
+            self.perimeter_label.config(
+                text=(
+                    f"Perimeter: "
+                    f"{shape.perimeter():.2f}"
+                )
+            )
+
+        # 3D
+
+        elif isinstance(
+            shape,
+            Shape3D
+        ):
+
+            self.area_label.config(
+                text=(
+                    f"Surface area: "
+                    f"{shape.surface_area():.2f}"
+                )
+            )
+
+            self.perimeter_label.config(
+                text=(
+                    f"Volume: "
+                    f"{shape.volume():.2f}"
+                )
+            )
+
+    def shape_created(
+        self,
+        shape
+    ):
+
+        self.renderer.draw(
+            shape
         )
 
-        self.perimeter_label.config(
-            text=f"Perimeter: {shape.perimeter():.2f}"
+        self.update_shape_info(
+            shape
         )
-
-    def shape_created(self, shape):
-        self.renderer.draw(shape)
-        self.update_shape_info(shape)
 
     def run(self):
         self.root.mainloop()
